@@ -65,7 +65,8 @@ uint8_t IsoTp::send(Message_t* msg)
 #ifdef ISO_TP_DEBUG
                 Serial.println(F("Send FF"));
 #endif
-                if(!(retval=send_ff(msg)))   // FF complete
+                retval=send_ff(msg);
+                if(retval == 1)   // FF complete
                 {
                     msg->Buffer+=6;
                     msg->len-=6;
@@ -102,7 +103,7 @@ uint8_t IsoTp::send(Message_t* msg)
 #ifdef ISO_TP_DEBUG
             Serial.println(F("Send CF"));
 #endif
-            while(msg->len>7 & !bs)
+            while((msg->len > 7) & !bs)
             {
                 fc_delay(msg->min_sep_time);
                 if(!(retval=send_cf(msg)))
